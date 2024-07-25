@@ -1,6 +1,6 @@
 # GRInvAcc
 
-This project is a self-hosted Profit Accounting and Inventory program, using a Kotlin backend via Ktor and a frontend with React.
+This project is a self-hosted Profit Accounting and Inventory program, using a Kotlin backend via Ktor and a basic web-based frontend.
 
 ## Features
 - Main dashboard with all profit/loss and inventory information available.
