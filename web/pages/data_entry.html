@@ -4,6 +4,7 @@
     <head>
         <title>GRInvAcc</title>
         <script src="https://cdn.tailwindcss.com"></script>
+        <script src="/js/data_entry" defer></script>
     </head>
    <body class="bg-cyan-500">
         <!-- navbar -->
@@ -13,6 +14,22 @@
             <a href="/inventory" class="px-4 py-0.5 hover:bg-gray-300 hover:text-cyan-950"> Inventory </a>
         </div>
 
-        data
+        <div class="text-2xl pl-4">
+            <p class="py-2"><label for="data_entry_dropdown">Select an action</label></p>
+            <p>
+                <select id="data_entry_dropdown">
+                    <option> Please choose an option </option>
+                    <option> Add Sale </option>
+                    <option> Add Buy </option>
+                    <option> Add Item </option>
+                </select>
+            </p>
+        </div>
+
+        <div id="sale" style="display:none;"> adding sale</div>
+
+        <div id="buy" style="display:none;"> adding buying </div>
+
+        <div id="item" style="display:none;"> adding item</div>
     </body>
 </html>

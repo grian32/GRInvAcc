@@ -18,6 +18,10 @@ fun main() {
             get("/inventory") {
                 call.respondFile(File("web/pages/inventory.html"))
             }
+
+            get("/js/data_entry") {
+                call.respondFile(File("web/js/data_entry.js"))
+            }
         }
     }.start(wait = true)
 }
