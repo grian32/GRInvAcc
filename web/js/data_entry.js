@@ -51,3 +51,17 @@ function add_item_display() {
     buyDiv.style.setProperty("display", "none")
     addItemDiv.style.setProperty("display", "")
 }
+
+function submit_sale() {
+    // TODO
+}
+
+
+function submit_buy() {
+    // TODO
+}
+
+
+function submit_item_add() {
+    // TODO
+}
