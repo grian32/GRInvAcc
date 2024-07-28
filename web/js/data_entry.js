@@ -9,16 +9,16 @@ dropdown.onchange = () => {
 
     switch (index) {
         case 0:
-            none_selected();
+            noneSelected();
             break;
         case 1:
-            add_sale_display();
+            addSaleDisplay();
             break;
         case 2:
-            add_buy_display();
+            addBuyDisplay();
             break;
         case 3:
-            add_item_display();
+            addItemDisplay();
             break;
         default:
             break;
@@ -28,40 +28,40 @@ dropdown.onchange = () => {
 
 // kinda dodgy having 4 functions like this & setting display to "" to display the text
 // but can't think of a better away around it
-function none_selected() {
+function noneSelected() {
     saleDiv.style.setProperty("display", "none")
     buyDiv.style.setProperty("display", "none")
     addItemDiv.style.setProperty("display", "none")
 }
 
-function add_sale_display() {
+function addSaleDisplay() {
     saleDiv.style.setProperty("display", "")
     buyDiv.style.setProperty("display", "none")
     addItemDiv.style.setProperty("display", "none")
 }
 
-function add_buy_display() {
+function addBuyDisplay() {
     saleDiv.style.setProperty("display", "none")
     buyDiv.style.setProperty("display", "")
     addItemDiv.style.setProperty("display", "none")
 }
 
-function add_item_display() {
+function addItemDisplay() {
     saleDiv.style.setProperty("display", "none")
     buyDiv.style.setProperty("display", "none")
     addItemDiv.style.setProperty("display", "")
 }
 
-function submit_sale() {
+function submitSale() {
     // TODO
 }
 
 
-function submit_buy() {
+function submitBuy() {
     // TODO
 }
 
 
-function submit_item_add() {
+function submitItemAdd() {
     // TODO
 }
