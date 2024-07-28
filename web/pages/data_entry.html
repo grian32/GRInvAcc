@@ -26,33 +26,47 @@
             </p>
         </div>
 
-        <div id="sale" style="display:none;" class="text-2xl pl-4">
-            <p> Item ID: </p>
+        <div id="sale" style="display:none;" class="text-2xl pl-4 pt-6">
+            <p> Item ID:
+                <input type="text" id="sell_item_id" class="text-xl shadow-black shadow-md w-20 pl-2"/>
+            </p>
 
-            <p> Item Amount Sold: </p>
+            <p class="pt-2"> Item Amount Sold:
+                <input type="text" id="sell_item_amount" class="text-xl shadow-black shadow-md w-48 pl-2"/>
+            </p>
 
-            <p> Price per Item: </p>
+            <p class="pt-2"> Price per Item:
+                <input type="text" id="sell_ppi" class="text-xl shadow-black shadow-md w-20 pl-2"/>
+            </p>
 
+            <div class="pt-2"></div>
             <button onclick="submit_sale();" class="shadow-black shadow-md bg-gray-300 rounded-lg border-white border px-3 py-1 hover:bg-gray-200 active:bg-gray-100"> Submit </button>
         </div>
 
-        <div id="buy" style="display:none;" class="text-2xl pl-4">
-            <p> Item ID: </p>
+        <div id="buy" style="display:none;" class="text-2xl pl-4 pt-6">
+            <p> Item ID:
+                <input type="text" id="buy_item_id" class="text-xl shadow-black shadow-md w-20 pl-2"/>
+            </p>
 
-            <p> Item Amount Bought: </p>
+            <p class="pt-2"> Item Amount Sold:
+                <input type="text" id="buy_item_amount" class="text-xl shadow-black shadow-md w-48 pl-2"/>
+            </p>
 
-            <p> Price per Item: </p>
+            <p class="pt-2"> Price per Item:
+                <input type="text" id="buy_ppi" class="text-xl shadow-black shadow-md w-20 pl-2"/>
+            </p>
 
+            <div class="pt-2"></div>
             <button onclick="submit_buy();" class="shadow-black shadow-md bg-gray-300 rounded-lg border-white border px-3 py-1 hover:bg-gray-200 active:bg-gray-100"> Submit </button>
         </div>
 
         <div id="item" style="display:none;" class="text-2xl pl-4 pt-6">
             <p> Item Name:
-                <input type="text" id="nameadditem" class="text-xl shadow-black shadow-md w-96"/>
+                <input type="text" id="name_add_item" class="text-xl shadow-black shadow-md w-96 pl-2"/>
             </p>
 
             <p class="pt-2"> Important:
-                <input type="checkbox" class="w-4 h-4" id="importantadditem"/>
+                <input type="checkbox" class="w-4 h-4" id="important_add_item"/>
                 <span class="text-xs">adds the item to dashboard </span>
             </p>
             <div class="pt-2"></div>
