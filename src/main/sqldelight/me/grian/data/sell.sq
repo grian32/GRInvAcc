@@ -1,0 +1,7 @@
+selectAll:
+SELECT *
+FROM sell;
+
+insert:
+INSERT INTO sell(amount_sold, price_per_item)
+VALUES (?, ?);

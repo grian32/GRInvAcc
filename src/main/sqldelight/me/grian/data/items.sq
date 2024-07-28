@@ -1,0 +1,10 @@
+selectAll:
+SELECT *
+FROM items;
+
+insert:
+INSERT INTO items(current_stock, item_name)
+VALUES (0, ?);
+
+updateStock:
+UPDATE items SET current_stock = ? WHERE id = ?;
