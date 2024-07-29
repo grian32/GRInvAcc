@@ -7,22 +7,24 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import me.grian.Database
 import me.grian.data.SellQueries
+import util.properties.parseSQLConfig
 import java.io.File
 
 
 fun main() {
-    val dataSource: HikariDataSource = HikariDataSource()
+    val dataSource = HikariDataSource()
 
-    // TODO: move to config file
+    val configFile = parseSQLConfig("sqlConfig.properties")
 
-    dataSource.jdbcUrl = "jdbc:postgresql://localhost:5432/grinvacc"
-    dataSource.username = "admin"
-    dataSource.password = "12345"
+    dataSource.jdbcUrl = configFile.databaseURL
+    dataSource.username = configFile.username
+    dataSource.password = configFile.password
 
+    // TODO: add migration that creates tables
     val driver: SqlDriver = dataSource.asJdbcDriver()
     val database = Database(driver)
 
-    embeddedServer(Netty, 8080) {
+    embeddedServer(Netty, 6450) {
         routing {
             get("/") {
                 call.respondFile(File("web/index.html"))
