@@ -8,3 +8,7 @@ VALUES (0, ?);
 
 updateStock:
 UPDATE items SET current_stock = ? WHERE id = ?;
+
+deleteWithID:
+DELETE FROM items
+WHERE id = ?;

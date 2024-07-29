@@ -5,3 +5,7 @@ FROM buy;
 insert:
 INSERT INTO buy(amount_bought, price_per_item)
 VALUES (?, ?);
+
+deleteWithID:
+DELETE FROM buy
+WHERE id = ?;
