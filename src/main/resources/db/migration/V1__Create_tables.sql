@@ -1,3 +1,5 @@
+-- noinspection SqlNoDataSourceInspectionForFile
+
 CREATE TABLE buy (
     id SERIAL PRIMARY KEY NOT NULL,
     item_id INTEGER NOT NULL,
