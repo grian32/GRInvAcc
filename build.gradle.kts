@@ -1,6 +1,8 @@
 plugins {
     kotlin("jvm") version "2.0.0"
     id("app.cash.sqldelight") version "2.0.2"
+    // required for flyway to work with psql ref: https://github.com/flyway/flyway/issues/3889#issuecomment-2131050408
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "me.grian"
@@ -15,7 +17,10 @@ dependencies {
     testImplementation(kotlin("test"))
     implementation("io.ktor:ktor-server-netty:3.0.0-beta-2")
     implementation("app.cash.sqldelight:jdbc-driver:2.0.2")
-    implementation("com.zaxxer:HikariCP:5.1.0")
+    implementation("org.flywaydb:flyway-core:10.16.0")
+    implementation("com.h2database:h2:2.2.224")
+    implementation("org.flywaydb:flyway-database-postgresql:10.16.0")
+    implementation("org.postgresql:postgresql:42.7.3")
 }
 
 tasks.test {

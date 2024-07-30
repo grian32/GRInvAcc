@@ -1,28 +1,30 @@
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.jdbc.asJdbcDriver
-import com.zaxxer.hikari.HikariDataSource
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import me.grian.Database
-import me.grian.data.SellQueries
+import org.flywaydb.core.Flyway
 import util.properties.parseSQLConfig
 import java.io.File
 
 
 fun main() {
-    val dataSource = HikariDataSource()
 
-    val configFile = parseSQLConfig("sqlConfig.properties")
+    val sqlConfig = parseSQLConfig("sqlConfig.properties")
 
-    dataSource.jdbcUrl = configFile.databaseURL
-    dataSource.username = configFile.username
-    dataSource.password = configFile.password
+    val flyway = Flyway.configure().dataSource(
+        sqlConfig.databaseURL,
+        sqlConfig.username,
+        sqlConfig.password
+    )
 
     // TODO: add migration that creates tables
-    val driver: SqlDriver = dataSource.asJdbcDriver()
+    val driver: SqlDriver = flyway.dataSource.asJdbcDriver()
     val database = Database(driver)
+
+    database.sellQueries.deleteWithID(2)
 
     embeddedServer(Netty, 6450) {
         routing {

@@ -12,5 +12,5 @@ This project is a self-hosted Profit Accounting and Inventory program, using a K
 These instructions assume you are familiar with PostgreSQL, and general project setup.
 
 1. Create a PostgreSQL Database, for said database create a user with `SUPERUSER` permissions
-3. Replace the placeholder data in the `sqlConfig.properties` file located in the root of the project with your database URL, username & password
-4. Run the project and open up `localhost:6450` for the frontend interface
+2. Replace the placeholder data in the `sqlConfig.properties` file located in the root of the project with your database URL, username & password
+3. Run the project and open up `localhost:6450` for the frontend interface
