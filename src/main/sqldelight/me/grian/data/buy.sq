@@ -3,8 +3,8 @@ SELECT *
 FROM buy;
 
 insert:
-INSERT INTO buy(amount_bought, price_per_item)
-VALUES (?, ?);
+INSERT INTO buy(item_id, amount_bought, price_per_item)
+VALUES (?, ?, ?);
 
 deleteWithID:
 DELETE FROM buy
