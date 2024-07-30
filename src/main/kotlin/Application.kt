@@ -14,17 +14,18 @@ fun main() {
 
     val sqlConfig = parseSQLConfig("sqlConfig.properties")
 
-    val flyway = Flyway.configure().dataSource(
+    // can't get datasource for sql delight after .load() so have to separate
+    val flywayPreload = Flyway.configure().dataSource(
         sqlConfig.databaseURL,
         sqlConfig.username,
         sqlConfig.password
     )
 
-    // TODO: add migration that creates tables
-    val driver: SqlDriver = flyway.dataSource.asJdbcDriver()
-    val database = Database(driver)
+    val flyway = flywayPreload.load()
+    flyway.migrate()
 
-    database.sellQueries.deleteWithID(2)
+    val driver: SqlDriver = flywayPreload.dataSource.asJdbcDriver()
+    val database = Database(driver)
 
     embeddedServer(Netty, 6450) {
         routing {
