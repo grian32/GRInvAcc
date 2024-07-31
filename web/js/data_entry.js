@@ -3,6 +3,7 @@ let dropdown = document.getElementById("data_entry_dropdown")
 let saleDiv = document.getElementById("sale")
 let buyDiv = document.getElementById("buy")
 let addItemDiv = document.getElementById("item")
+let rejectedDiv = document.getElementById("rejected")
 
 dropdown.onchange = () => {
     let index = dropdown.selectedIndex
@@ -53,13 +54,21 @@ function addItemDisplay() {
 }
 
 async function submitSale() {
-    let itemID = document.getElementById("sell_item_id")
+    let itemId = document.getElementById("sell_item_id")
     let itemAmount = document.getElementById("sell_item_amount")
     let itemPPI = document.getElementById("sell_ppi")
 
+    if (
+        isNaN(parseInt(itemId.value)) ||
+        isNaN(parseInt(itemAmount.value)) ||
+        isNaN(parseInt(itemPPI.value))
+    ) {
+        rejectedDiv.style.setProperty("display", "")
+        return
+    }
     // TODO: add validation client side with display on html to tell user it's wrong
     let requestBody = JSON.stringify({
-            itemId: itemID.value,
+            itemId: itemId.value,
             amountSold: itemAmount.value,
             pricePerItem: itemPPI.value
         }
@@ -72,6 +81,10 @@ async function submitSale() {
             "Content-Type": "application/json"
         }
     })
+
+    if (rejectedDiv.style.getPropertyValue("display") !== "none") {
+        rejectedDiv.style.setProperty("display", "none")
+    }
 }
 
 
