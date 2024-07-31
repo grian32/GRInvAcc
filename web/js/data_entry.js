@@ -52,8 +52,26 @@ function addItemDisplay() {
     addItemDiv.style.setProperty("display", "")
 }
 
-function submitSale() {
-    // TODO
+async function submitSale() {
+    let itemID = document.getElementById("sell_item_id")
+    let itemAmount = document.getElementById("sell_item_amount")
+    let itemPPI = document.getElementById("sell_ppi")
+
+    // TODO: add validation client side with display on html to tell user it's wrong
+    let requestBody = JSON.stringify({
+            itemId: itemID.value,
+            amountSold: itemAmount.value,
+            pricePerItem: itemPPI.value
+        }
+    )
+
+    await fetch("/api/sell", {
+        method: "POST",
+        body: requestBody,
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
 }
 
 

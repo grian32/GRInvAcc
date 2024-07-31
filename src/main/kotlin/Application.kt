@@ -1,7 +1,6 @@
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.jdbc.asJdbcDriver
-import data.Sale
-import data.addToDb
+import data.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
@@ -57,8 +56,26 @@ fun main() {
             }
 
             post("/api/sell") {
-                val sale = call.receive<Sale>()
+                val sale = call.receive<SellData>()
                 sale.addToDb(database)
+                call.respond(HttpStatusCode.OK)
+            }
+
+            post("/api/buy") {
+                val buy = call.receive<BuyData>()
+                buy.addToDb(database)
+                call.respond(HttpStatusCode.OK)
+            }
+
+            post("/api/item")  {
+                val item = call.receive<ItemData>()
+                println(item)
+                if (item.currentStock != 0) {
+                    call.respond(HttpStatusCode.BadRequest, "Setting stock on item creation is not supported")
+                    return@post
+                }
+
+                item.addToDb(database)
                 call.respond(HttpStatusCode.OK)
             }
         }

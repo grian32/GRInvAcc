@@ -2,6 +2,14 @@ package data
 
 import me.grian.Database
 
-fun Sale.addToDb(database : Database) {
-    database.sellQueries.insert(this.itemId, this.amountSold, this.pricePerItem)
+fun SellData.addToDb(database : Database) {
+    database.sellQueries.insert(itemId, amountSold, pricePerItem)
+}
+
+fun BuyData.addToDb(database : Database) {
+    database.buyQueries.insert(itemId, amountBought, pricePerItem)
+}
+
+fun ItemData.addToDb(database : Database) {
+    database.itemsQueries.insert(itemName, important)
 }

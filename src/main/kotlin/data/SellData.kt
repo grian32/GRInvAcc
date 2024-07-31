@@ -3,7 +3,7 @@ package data
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Sale(
+data class SellData(
     val itemId: Int,
     val amountSold: Int,
     val pricePerItem: Int
