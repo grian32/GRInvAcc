@@ -69,7 +69,6 @@ fun main() {
 
             post("/api/item")  {
                 val item = call.receive<ItemData>()
-                println(item)
                 if (item.currentStock != 0) {
                     call.respond(HttpStatusCode.BadRequest, "Setting stock on item creation is not supported")
                     return@post

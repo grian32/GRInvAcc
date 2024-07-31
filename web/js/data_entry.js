@@ -53,6 +53,7 @@ function addItemDisplay() {
     addItemDiv.style.setProperty("display", "")
 }
 
+// TODO: maybe abstract this to another function see how that looks
 async function submitSale() {
     let itemId = document.getElementById("sell_item_id")
     let itemAmount = document.getElementById("sell_item_amount")
@@ -66,7 +67,7 @@ async function submitSale() {
         rejectedDiv.style.setProperty("display", "")
         return
     }
-    // TODO: add validation client side with display on html to tell user it's wrong
+
     let requestBody = JSON.stringify({
             itemId: itemId.value,
             amountSold: itemAmount.value,
@@ -88,11 +89,65 @@ async function submitSale() {
 }
 
 
-function submitBuy() {
-    // TODO
+async function submitBuy() {
+    let itemId = document.getElementById("buy_item_id")
+    let itemAmount = document.getElementById("buy_item_amount")
+    let itemPPI = document.getElementById("buy_ppi")
+
+    if (
+        isNaN(parseInt(itemId.value)) ||
+        isNaN(parseInt(itemAmount.value)) ||
+        isNaN(parseInt(itemPPI.value))
+    ) {
+        rejectedDiv.style.setProperty("display", "")
+        return
+    }
+
+    let requestBody = JSON.stringify({
+            itemId: itemId.value,
+            amountBought: itemAmount.value,
+            pricePerItem: itemPPI.value
+        }
+    )
+
+    await fetch("/api/buy", {
+        method: "POST",
+        body: requestBody,
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+
+    if (rejectedDiv.style.getPropertyValue("display") !== "none") {
+        rejectedDiv.style.setProperty("display", "none")
+    }
 }
 
 
-function submitItemAdd() {
-    // TODO
+async function submitItemAdd() {
+    let itemName = document.getElementById("name_add_item")
+    let important = document.getElementById("important_add_item")
+
+    if (itemName.value === "") {
+        rejectedDiv.style.setProperty("display", "")
+        return
+    }
+
+    let requestBody = JSON.stringify({
+            itemName: itemName.value,
+            important: important.checked
+        }
+    )
+
+    await fetch("/api/item", {
+        method: "POST",
+        body: requestBody,
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+
+   if (rejectedDiv.style.getPropertyValue("display") !== "none") {
+        rejectedDiv.style.setProperty("display", "none")
+    }
 }
