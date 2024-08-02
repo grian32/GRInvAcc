@@ -10,11 +10,15 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import me.grian.Database
+import me.grian.Items
 import org.flywaydb.core.Flyway
 import util.properties.parseSQLConfig
 import java.io.File
 
+// TODO: use nio.File
 
 fun main() {
 
@@ -55,6 +59,10 @@ fun main() {
                 call.respondFile(File("web/js/data_entry.js"))
             }
 
+            get("/js/dashboard") {
+                call.respondFile(File("web/js/dashboard.js"))
+            }
+
             post("/api/sell") {
                 val sale = call.receive<SellData>()
                 sale.addToDb(database)
@@ -76,6 +84,11 @@ fun main() {
 
                 item.addToDb(database)
                 call.respond(HttpStatusCode.OK)
+            }
+
+            get("/api/item/important") {
+                val importantItems = database.itemsQueries.selectAllImportant().executeAsList().map(Items::toItemData)
+                call.respondText(Json.encodeToString(importantItems), contentType = ContentType.Application.Json)
             }
         }
     }.start(wait = true)

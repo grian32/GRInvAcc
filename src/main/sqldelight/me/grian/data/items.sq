@@ -12,3 +12,8 @@ UPDATE items SET current_stock = ? WHERE id = ?;
 deleteWithID:
 DELETE FROM items
 WHERE id = ?;
+
+selectAllImportant:
+SELECT *
+FROM items
+WHERE important = TRUE;
