@@ -20,4 +20,4 @@ fun BuyData.addToDb(database : Database) {
 fun ItemData.addToDb(database : Database) = database.itemsQueries.insert(itemName, important)
 
 
-fun Items.toItemData() = ItemData(current_stock, item_name, important)
+fun Items.toItemData() = ItemData(id, current_stock, item_name, important)

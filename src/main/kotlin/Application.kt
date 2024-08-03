@@ -18,8 +18,6 @@ import org.flywaydb.core.Flyway
 import util.properties.parseSQLConfig
 import java.io.File
 
-// TODO: use nio.File
-
 fun main() {
 
     val sqlConfig = parseSQLConfig("sqlConfig.properties")
