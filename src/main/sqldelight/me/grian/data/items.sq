@@ -9,7 +9,7 @@ VALUES (0, ?, ?);
 updateStock:
 UPDATE items SET current_stock = ? WHERE id = ?;
 
-deleteWithID:
+deleteWithId:
 DELETE FROM items
 WHERE id = ?;
 
@@ -17,3 +17,8 @@ selectAllImportant:
 SELECT *
 FROM items
 WHERE important = TRUE;
+
+selectWithId:
+SELECT *
+FROM items
+WHERE id = ?;
