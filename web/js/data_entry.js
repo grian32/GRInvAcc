@@ -53,6 +53,7 @@ function addItemDisplay() {
     addItemDiv.style.setProperty("display", "")
 }
 
+// TODO: Add error case/display for item not existing
 // TODO: maybe abstract this to another function see how that looks
 async function submitSale() {
     let itemId = document.getElementById("sell_item_id")
@@ -62,7 +63,7 @@ async function submitSale() {
     if (
         isNaN(parseInt(itemId.value)) ||
         isNaN(parseInt(itemAmount.value)) ||
-        isNaN(parseInt(itemPPI.value))
+        isNaN(parseFloat(itemPPI.value))
     ) {
         rejectedDiv.style.setProperty("display", "")
         return
@@ -97,7 +98,7 @@ async function submitBuy() {
     if (
         isNaN(parseInt(itemId.value)) ||
         isNaN(parseInt(itemAmount.value)) ||
-        isNaN(parseInt(itemPPI.value))
+        isNaN(parseFloat(itemPPI.value))
     ) {
         rejectedDiv.style.setProperty("display", "")
         return

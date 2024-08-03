@@ -4,14 +4,16 @@ CREATE TABLE buy (
     id SERIAL PRIMARY KEY NOT NULL,
     item_id INTEGER NOT NULL,
     amount_bought INTEGER NOT NULL,
-    price_per_item INTEGER NOT NULL
+    price_per_item FLOAT NOT NULL,
+    date TIMESTAMP DEFAULT (now() AT TIME ZONE 'UTC')
 );
 
 CREATE TABLE sell (
     id SERIAL PRIMARY KEY NOT NULL,
     item_id INTEGER NOT NULL,
     amount_sold INTEGER NOT NULL,
-    price_per_item INTEGER NOT NULL
+    price_per_item FLOAT NOT NULL,
+    date TIMESTAMP DEFAULT (now() AT TIME ZONE 'UTC')
 );
 
 CREATE TABLE items (

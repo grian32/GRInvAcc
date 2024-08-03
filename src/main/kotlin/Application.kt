@@ -12,11 +12,14 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.serializersModuleOf
 import me.grian.Database
 import me.grian.Items
 import org.flywaydb.core.Flyway
+import util.LocalDateTimeSerializer
 import util.properties.parseSQLConfig
 import java.io.File
+import kotlin.math.roundToInt
 
 fun main() {
 
@@ -37,9 +40,13 @@ fun main() {
     val driver: SqlDriver = flywayPreload.dataSource.asJdbcDriver()
     val database = Database(driver)
 
+    val dateSerializer = serializersModuleOf(LocalDateTimeSerializer)
+
     embeddedServer(Netty, 6450) {
         install(ContentNegotiation) {
-            json()
+            json( Json {
+                serializersModule = dateSerializer
+            } )
         }
 
         routing {
@@ -72,10 +79,12 @@ fun main() {
             get("/api/profits") {
                 val allSales = database.sellQueries.selectAll().executeAsList().sumOf {
                     it.price_per_item * it.amount_sold
-                }
+                }.roundToInt()
+
                 val allBuys = database.buyQueries.selectAll().executeAsList().sumOf {
                     it.price_per_item * it.amount_bought
-                }
+                }.roundToInt()
+
                 val profit = allSales - allBuys
 
                 val profitData = ProfitData(
@@ -105,6 +114,12 @@ fun main() {
                     call.respond(HttpStatusCode.BadRequest, "Setting stock on item creation is not supported")
                     return@post
                 }
+
+                if (item.id != 0) {
+                    call.respond(HttpStatusCode.BadRequest, "Cannot set item id on creation")
+                    return@post
+                }
+
 
                 item.addToDb(database)
                 call.respond(HttpStatusCode.OK)

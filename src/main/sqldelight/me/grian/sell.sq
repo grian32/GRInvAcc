@@ -1,6 +1,9 @@
+SET TIMEZONE='UTC';
+
 CREATE TABLE sell (
-  id SERIAL PRIMARY KEY NOT NULL,
-  item_id INTEGER NOT NULL,
-  amount_sold INTEGER NOT NULL,
-  price_per_item INTEGER NOT NULL
+    id SERIAL PRIMARY KEY NOT NULL,
+    item_id INTEGER NOT NULL,
+    amount_sold INTEGER NOT NULL,
+    price_per_item FLOAT NOT NULL,
+    date TIMESTAMP
 );
