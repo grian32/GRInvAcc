@@ -63,6 +63,30 @@ fun main() {
                 call.respondFile(File("web/js/dashboard.js"))
             }
 
+            get("/api/item/important") {
+                // converts to ItemData for serialization
+                val importantItems = database.itemsQueries.selectAllImportant().executeAsList().map(Items::toItemData)
+                call.respondText(Json.encodeToString(importantItems), contentType = ContentType.Application.Json)
+            }
+
+            get("/api/profits") {
+                val allSales = database.sellQueries.selectAll().executeAsList().sumOf {
+                    it.price_per_item * it.amount_sold
+                }
+                val allBuys = database.buyQueries.selectAll().executeAsList().sumOf {
+                    it.price_per_item * it.amount_bought
+                }
+                val profit = allSales - allBuys
+
+                val profitData = ProfitData(
+                    allSales,
+                    allBuys,
+                    profit
+                )
+
+                call.respondText(Json.encodeToString(profitData), contentType = ContentType.Application.Json)
+            }
+
             post("/api/sell") {
                 val sale = call.receive<SellData>()
                 sale.addToDb(database)
@@ -84,11 +108,6 @@ fun main() {
 
                 item.addToDb(database)
                 call.respond(HttpStatusCode.OK)
-            }
-
-            get("/api/item/important") {
-                val importantItems = database.itemsQueries.selectAllImportant().executeAsList().map(Items::toItemData)
-                call.respondText(Json.encodeToString(importantItems), contentType = ContentType.Application.Json)
             }
         }
     }.start(wait = true)
