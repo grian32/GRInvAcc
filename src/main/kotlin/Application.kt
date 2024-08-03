@@ -29,6 +29,8 @@ fun main() {
         sqlConfig.password
     )
 
+    // TODO: add date to sell/buys autogen :S
+
     val flyway = flywayPreload.load()
     flyway.migrate()
 
