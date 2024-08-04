@@ -13,12 +13,17 @@ import io.ktor.server.routing.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.serializersModuleOf
+import me.grian.Buy
 import me.grian.Database
 import me.grian.Items
+import me.grian.Sell
 import org.flywaydb.core.Flyway
 import util.LocalDateTimeSerializer
 import util.properties.parseSQLConfig
 import java.io.File
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import kotlin.math.roundToInt
 
 fun main() {
@@ -66,6 +71,10 @@ fun main() {
                 call.respondFile(File("web/js/data_entry.js"))
             }
 
+            get("/js/inventory") {
+                call.respondFile(File("web/js/inventory.js"))
+            }
+
             get("/js/dashboard") {
                 call.respondFile(File("web/js/dashboard.js"))
             }
@@ -96,6 +105,37 @@ fun main() {
                 call.respondText(Json.encodeToString(profitData), contentType = ContentType.Application.Json)
             }
 
+            get("api/item/inventory") {
+                val items = database.itemsQueries.selectAll().executeAsList().map(Items::toItemData)
+                val sells = database.sellQueries.selectAll().executeAsList().map(Sell::toSellData)
+                val buys = database.buyQueries.selectAll().executeAsList().map(Buy::toBuyData)
+
+                val currentMonth = LocalDateTime.now(ZoneOffset.UTC).month
+
+                val inventoryData: MutableList<InventoryItemData> = mutableListOf()
+
+                items.forEach { item ->
+                    val soldCurrentMonth = sells.filter { it.itemId == item.id && it.date.month == currentMonth }
+                    val boughtCurrentMonth = buys.filter { it.itemId == item.id && it.date.month == currentMonth }
+
+                    val amountSold = soldCurrentMonth.sumOf { it.amountSold }
+                    val amountBought = boughtCurrentMonth.sumOf { it.amountBought }
+                    val profit = soldCurrentMonth.sumOf { it.pricePerItem * it.amountSold } - boughtCurrentMonth.sumOf { it.pricePerItem * it.amountBought }
+
+                    inventoryData.add(InventoryItemData(
+                        item.id,
+                        item.currentStock,
+                        item.itemName,
+                        item.important,
+                        amountSold,
+                        amountBought,
+                        profit.roundToInt()
+                    ))
+                }
+
+                call.respondText(Json.encodeToString(inventoryData), contentType = ContentType.Application.Json)
+            }
+
             post("/api/sell") {
                 val sale = call.receive<SellData>()
                 sale.addToDb(database)
@@ -108,7 +148,7 @@ fun main() {
                 call.respond(HttpStatusCode.OK)
             }
 
-            post("/api/item")  {
+            post("/api/item") {
                 val item = call.receive<ItemData>()
                 if (item.currentStock != 0) {
                     call.respond(HttpStatusCode.BadRequest, "Setting stock on item creation is not supported")
@@ -124,6 +164,7 @@ fun main() {
                 item.addToDb(database)
                 call.respond(HttpStatusCode.OK)
             }
+
         }
     }.start(wait = true)
 }
