@@ -4,7 +4,7 @@ let buyAmount = document.getElementById("total_expense_amount")
 let profitAmount = document.getElementById("total_profit_amount")
 
 addEventListener("DOMContentLoaded", async _ => {
-    await addImportantItems()
+    await populateImportantItems()
     await updateProfits()
 })
 
@@ -28,7 +28,7 @@ function makeTableElement(itemName, currentStock) {
     return row
 }
 
-async function addImportantItems() {
+async function populateImportantItems() {
     let importantData = await (await fetch("http://localhost:6450/api/item/important")).json()
 
     importantData.forEach(i => {
