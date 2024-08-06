@@ -37,7 +37,10 @@ fun main() {
         sqlConfig.password
     )
 
-    // TODO: add date to sell/buys autogen :S
+    // TODO: add users bought from/sold to to buy/sell
+    // TODO: add expense/profit to data entry tab
+    // TODO: add users to data entry tab
+    // TODO: add buy/sells tab that lets you filter by the following: user, date, item id, all in combo
 
     val flyway = flywayPreload.load()
     flyway.migrate()
