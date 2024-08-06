@@ -137,6 +137,8 @@ fun main() {
                     ))
                 }
 
+                inventoryData.sortBy { it.id }
+
                 call.respondText(Json.encodeToString(inventoryData), contentType = ContentType.Application.Json)
             }
 

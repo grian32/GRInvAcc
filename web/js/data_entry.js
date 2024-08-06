@@ -4,6 +4,7 @@ let buyDiv = document.getElementById("buy")
 let addItemDiv = document.getElementById("item")
 let rejectedDiv = document.getElementById("rejected")
 let invalidItemIdDiv = document.getElementById("invalid_item_id")
+let successfulDiv = document.getElementById("success")
 
 dropdown.onchange = () => {
     let index = dropdown.selectedIndex
@@ -66,12 +67,14 @@ async function submitSale() {
     ) {
         rejectedDiv.style.setProperty("display", "")
         removeInvalidItemId()
+        removeSuccess()
         return
     }
 
     if (!await itemIdExists(parseInt(itemId.value))) {
         invalidItemIdDiv.style.setProperty("display", "")
         removeRejected()
+        removeSuccess()
         return
     }
 
@@ -88,6 +91,11 @@ async function submitSale() {
         headers: {
             "Content-Type": "application/json"
         }
+    })
+
+    successfulDiv.style.setProperty("display", "")
+    saleDiv.querySelectorAll("input").forEach(elem => {
+        elem.value = ""
     })
 
     removeRejected()
@@ -107,12 +115,14 @@ async function submitBuy() {
     ) {
         rejectedDiv.style.setProperty("display", "")
         removeInvalidItemId()
+        removeSuccess()
         return
     }
 
     if (!await itemIdExists(parseInt(itemId.value))) {
         invalidItemIdDiv.style.setProperty("display", "")
         removeRejected()
+        removeSuccess()
         return
     }
 
@@ -131,6 +141,11 @@ async function submitBuy() {
         }
     })
 
+    successfulDiv.style.setProperty("display", "")
+    buyDiv.querySelectorAll("input").forEach(elem => {
+        elem.value = ""
+    })
+
     removeRejected()
     removeInvalidItemId()
 }
@@ -142,6 +157,8 @@ async function submitItemAdd() {
 
     if (itemName.value === "") {
         rejectedDiv.style.setProperty("display", "")
+        removeInvalidItemId()
+        removeSuccess()
         return
     }
 
@@ -159,6 +176,11 @@ async function submitItemAdd() {
         }
     })
 
+    addItemDiv.querySelectorAll("input").forEach(elem => {
+        elem.value = ""
+    })
+    successfulDiv.style.setProperty("display", "")
+
     removeRejected()
     removeInvalidItemId()
 }
@@ -172,6 +194,12 @@ function removeRejected() {
 function removeInvalidItemId() {
     if (invalidItemIdDiv.style.getPropertyValue("display") !== "none") {
         invalidItemIdDiv.style.setProperty("display", "none")
+    }
+}
+
+function removeSuccess() {
+    if (successfulDiv.style.getPropertyValue("display") !== "none") {
+        successfulDiv.style.setProperty("display", "none")
     }
 }
 
