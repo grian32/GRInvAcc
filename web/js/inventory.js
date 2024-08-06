@@ -17,7 +17,6 @@ async function populateTable() {
     let data = await (await fetch("http://localhost:6450/api/item/inventory")).json()
 
     for (const i of data) {
-        console.log(i)
         tableBody.appendChild(
             makeTableElement(
                 i["id"],
