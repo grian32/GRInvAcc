@@ -1,9 +1,9 @@
-
 let dropdown = document.getElementById("data_entry_dropdown")
 let saleDiv = document.getElementById("sale")
 let buyDiv = document.getElementById("buy")
 let addItemDiv = document.getElementById("item")
 let rejectedDiv = document.getElementById("rejected")
+let invalidItemIdDiv = document.getElementById("invalid_item_id")
 
 dropdown.onchange = () => {
     let index = dropdown.selectedIndex
@@ -53,19 +53,25 @@ function addItemDisplay() {
     addItemDiv.style.setProperty("display", "")
 }
 
-// TODO: Add error case/display for item not existing
-// TODO: maybe abstract this to another function see how that looks
 async function submitSale() {
     let itemId = document.getElementById("sell_item_id")
     let itemAmount = document.getElementById("sell_item_amount")
     let itemPPI = document.getElementById("sell_ppi")
 
+    // gets detected as duplicate but difficult to extract
     if (
         isNaN(parseInt(itemId.value)) ||
         isNaN(parseInt(itemAmount.value)) ||
         isNaN(parseFloat(itemPPI.value))
     ) {
         rejectedDiv.style.setProperty("display", "")
+        removeInvalidItemId()
+        return
+    }
+
+    if (!await itemIdExists(parseInt(itemId.value))) {
+        invalidItemIdDiv.style.setProperty("display", "")
+        removeRejected()
         return
     }
 
@@ -84,9 +90,8 @@ async function submitSale() {
         }
     })
 
-    if (rejectedDiv.style.getPropertyValue("display") !== "none") {
-        rejectedDiv.style.setProperty("display", "none")
-    }
+    removeRejected()
+    removeInvalidItemId()
 }
 
 
@@ -101,6 +106,13 @@ async function submitBuy() {
         isNaN(parseFloat(itemPPI.value))
     ) {
         rejectedDiv.style.setProperty("display", "")
+        removeInvalidItemId()
+        return
+    }
+
+    if (!await itemIdExists(parseInt(itemId.value))) {
+        invalidItemIdDiv.style.setProperty("display", "")
+        removeRejected()
         return
     }
 
@@ -119,9 +131,8 @@ async function submitBuy() {
         }
     })
 
-    if (rejectedDiv.style.getPropertyValue("display") !== "none") {
-        rejectedDiv.style.setProperty("display", "none")
-    }
+    removeRejected()
+    removeInvalidItemId()
 }
 
 
@@ -148,7 +159,22 @@ async function submitItemAdd() {
         }
     })
 
-   if (rejectedDiv.style.getPropertyValue("display") !== "none") {
+    removeRejected()
+    removeInvalidItemId()
+}
+
+function removeRejected() {
+    if (rejectedDiv.style.getPropertyValue("display") !== "none") {
         rejectedDiv.style.setProperty("display", "none")
     }
+}
+
+function removeInvalidItemId() {
+    if (invalidItemIdDiv.style.getPropertyValue("display") !== "none") {
+        invalidItemIdDiv.style.setProperty("display", "none")
+    }
+}
+
+async function itemIdExists(itemId) {
+    return (await (await fetch("/api/item/ids")).json()).includes(itemId)
 }

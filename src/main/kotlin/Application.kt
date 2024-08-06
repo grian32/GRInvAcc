@@ -19,6 +19,7 @@ import me.grian.Items
 import me.grian.Sell
 import org.flywaydb.core.Flyway
 import util.LocalDateTimeSerializer
+import util.itemIdExists
 import util.properties.parseSQLConfig
 import java.io.File
 import java.time.Instant
@@ -139,14 +140,31 @@ fun main() {
                 call.respondText(Json.encodeToString(inventoryData), contentType = ContentType.Application.Json)
             }
 
+            get("api/item/ids") {
+                val ids = database.itemsQueries.selectAll().executeAsList().map { it.id }
+                call.respondText(Json.encodeToString(ids), contentType = ContentType.Application.Json)
+            }
+
             post("/api/sell") {
                 val sale = call.receive<SellData>()
+
+                if (!itemIdExists(database, sale.itemId)) {
+                    call.respond(HttpStatusCode.UnprocessableEntity, "Item Id does not exist")
+                    return@post
+                }
+
                 sale.addToDb(database)
                 call.respond(HttpStatusCode.OK)
             }
 
             post("/api/buy") {
                 val buy = call.receive<BuyData>()
+
+                if (!itemIdExists(database, buy.itemId)) {
+                    call.respond(HttpStatusCode.UnprocessableEntity, "Item Id does not exist")
+                    return@post
+                }
+
                 buy.addToDb(database)
                 call.respond(HttpStatusCode.OK)
             }
