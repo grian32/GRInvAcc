@@ -1,7 +1,7 @@
 let importantTable = document.getElementById("important_body")
-let salesAmount = document.getElementById("total_sales_amount")
-let buyAmount = document.getElementById("total_expense_amount")
-let profitAmount = document.getElementById("total_profit_amount")
+let salesAmount = document.getElementById("monthly_sales_amount")
+let buyAmount = document.getElementById("monthly_expense_amount")
+let profitAmount = document.getElementById("monthly_profit_amount")
 
 addEventListener("DOMContentLoaded", async _ => {
     await populateImportantItems()
@@ -50,7 +50,7 @@ async function populateImportantItems() {
 async function updateProfits() {
     let profitsData = await (await fetch("http://localhost:6450/api/profits")).json()
 
-    salesAmount.textContent = profitsData["totalSales"].toString() + "$"
-    buyAmount.textContent = profitsData["totalBuys"].toString() + "$"
-    profitAmount.textContent = profitsData["totalProfit"].toString() + "$"
+    salesAmount.textContent = profitsData["monthlySales"].toString() + "$"
+    buyAmount.textContent = profitsData["monthlyBuys"].toString() + "$"
+    profitAmount.textContent = profitsData["monthlyProfit"].toString() + "$"
 }

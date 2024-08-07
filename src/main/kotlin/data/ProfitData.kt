@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ProfitData(
-    val totalSales: Int,
-    val totalBuys: Int,
-    val totalProfit: Int
+    val monthlySales: Int,
+    val monthlyBuys: Int,
+    val monthlyProfit: Int
 )

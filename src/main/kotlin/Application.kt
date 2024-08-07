@@ -90,19 +90,25 @@ fun main() {
             }
 
             get("/api/profits") {
-                val allSales = database.sellQueries.selectAll().executeAsList().sumOf {
-                    it.price_per_item * it.amount_sold
+                val currentMonth = LocalDateTime.now(ZoneOffset.UTC).month
+
+                val monthlySales = database.sellQueries.selectAll().executeAsList().map(Sell::toSellData).filter {
+                    it.date.month == currentMonth
+                }.sumOf {
+                    it.pricePerItem * it.amountSold
                 }.roundToInt()
 
-                val allBuys = database.buyQueries.selectAll().executeAsList().sumOf {
-                    it.price_per_item * it.amount_bought
+                val monthlyBuys = database.buyQueries.selectAll().executeAsList().map(Buy::toBuyData).filter {
+                    it.date.month == currentMonth
+                }.sumOf {
+                    it.pricePerItem * it.amountBought
                 }.roundToInt()
 
-                val profit = allSales - allBuys
+                val profit = monthlySales - monthlyBuys
 
                 val profitData = ProfitData(
-                    allSales,
-                    allBuys,
+                    monthlySales,
+                    monthlyBuys,
                     profit
                 )
 
