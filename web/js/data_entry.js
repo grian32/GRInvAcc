@@ -1,5 +1,5 @@
 let dropdown = document.getElementById("data_entry_dropdown")
-let saleDiv = document.getElementById("sale")
+let saleDiv = document.getElementById("sell")
 let buyDiv = document.getElementById("buy")
 let addItemDiv = document.getElementById("item")
 let rejectedDiv = document.getElementById("rejected")
@@ -11,143 +11,36 @@ dropdown.onchange = () => {
 
     switch (index) {
         case 0:
-            noneSelected();
-            break;
+            setDisplay(null)
+            break
         case 1:
-            addSaleDisplay();
-            break;
+            setDisplay(saleDiv)
+            break
         case 2:
-            addBuyDisplay();
-            break;
+            setDisplay(buyDiv)
+            break
         case 3:
-            addItemDisplay();
-            break;
+            setDisplay(addItemDiv)
+            break
         default:
-            break;
+            break
     }
 }
 
-
-// kinda dodgy having 4 functions like this & setting display to "" to display the text
-// but can't think of a better away around it
-function noneSelected() {
-    saleDiv.style.setProperty("display", "none")
-    buyDiv.style.setProperty("display", "none")
-    addItemDiv.style.setProperty("display", "none")
-}
-
-function addSaleDisplay() {
-    saleDiv.style.setProperty("display", "")
-    buyDiv.style.setProperty("display", "none")
-    addItemDiv.style.setProperty("display", "none")
-}
-
-function addBuyDisplay() {
-    saleDiv.style.setProperty("display", "none")
-    buyDiv.style.setProperty("display", "")
-    addItemDiv.style.setProperty("display", "none")
-}
-
-function addItemDisplay() {
-    saleDiv.style.setProperty("display", "none")
-    buyDiv.style.setProperty("display", "none")
-    addItemDiv.style.setProperty("display", "")
+function setDisplay(activeDiv) {
+    let divs = [saleDiv, buyDiv, addItemDiv]
+    divs.forEach(div => {
+        div.style.setProperty("display", div === activeDiv ? "" : "none")
+    })
 }
 
 async function submitSale() {
-    let itemId = document.getElementById("sell_item_id")
-    let itemAmount = document.getElementById("sell_item_amount")
-    let itemPPI = document.getElementById("sell_ppi")
-
-    // gets detected as duplicate but difficult to extract
-    if (
-        isNaN(parseInt(itemId.value)) ||
-        isNaN(parseInt(itemAmount.value)) ||
-        isNaN(parseFloat(itemPPI.value))
-    ) {
-        rejectedDiv.style.setProperty("display", "")
-        removeInvalidItemId()
-        removeSuccess()
-        return
-    }
-
-    if (!await itemIdExists(parseInt(itemId.value))) {
-        invalidItemIdDiv.style.setProperty("display", "")
-        removeRejected()
-        removeSuccess()
-        return
-    }
-
-    let requestBody = JSON.stringify({
-            itemId: itemId.value,
-            amountSold: itemAmount.value,
-            pricePerItem: itemPPI.value
-        }
-    )
-
-    await fetch("/api/sell", {
-        method: "POST",
-        body: requestBody,
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
-
-    successfulDiv.style.setProperty("display", "")
-    saleDiv.querySelectorAll("input").forEach(elem => {
-        elem.value = ""
-    })
-
-    removeRejected()
-    removeInvalidItemId()
+    await handleBuySellSubmit("sell", "/api/sell")
 }
 
 
 async function submitBuy() {
-    let itemId = document.getElementById("buy_item_id")
-    let itemAmount = document.getElementById("buy_item_amount")
-    let itemPPI = document.getElementById("buy_ppi")
-
-    if (
-        isNaN(parseInt(itemId.value)) ||
-        isNaN(parseInt(itemAmount.value)) ||
-        isNaN(parseFloat(itemPPI.value))
-    ) {
-        rejectedDiv.style.setProperty("display", "")
-        removeInvalidItemId()
-        removeSuccess()
-        return
-    }
-
-    if (!await itemIdExists(parseInt(itemId.value))) {
-        invalidItemIdDiv.style.setProperty("display", "")
-        removeRejected()
-        removeSuccess()
-        return
-    }
-
-    let requestBody = JSON.stringify({
-            itemId: itemId.value,
-            amountBought: itemAmount.value,
-            pricePerItem: itemPPI.value
-        }
-    )
-
-    await fetch("/api/buy", {
-        method: "POST",
-        body: requestBody,
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
-
-    successfulDiv.style.setProperty("display", "")
-    buyDiv.querySelectorAll("input").forEach(elem => {
-        elem.value = ""
-    })
-
-    removeRejected()
-    removeInvalidItemId()
+    await handleBuySellSubmit("buy", "/api/buy")
 }
 
 
@@ -156,9 +49,7 @@ async function submitItemAdd() {
     let important = document.getElementById("important_add_item")
 
     if (itemName.value === "") {
-        rejectedDiv.style.setProperty("display", "")
-        removeInvalidItemId()
-        removeSuccess()
+        showRejected()
         return
     }
 
@@ -176,13 +67,71 @@ async function submitItemAdd() {
         }
     })
 
-    addItemDiv.querySelectorAll("input").forEach(elem => {
-        elem.value = ""
-    })
-    successfulDiv.style.setProperty("display", "")
 
-    removeRejected()
-    removeInvalidItemId()
+    showSuccess()
+    clearInputs("item")
+}
+
+async function handleBuySellSubmit(action, endpoint) {
+    let itemId = document.getElementById(`${action}_item_id`)
+    let itemAmount = document.getElementById(`${action}_item_amount`)
+    let itemPPI = document.getElementById(`${action}_ppi`)
+
+    if (
+        isNaN(parseInt(itemId.value)) ||
+        isNaN(parseInt(itemAmount.value)) ||
+        isNaN(parseFloat(itemPPI.value))
+    ) {
+        showRejected()
+        return
+    }
+
+    if (!await itemIdExists(parseInt(itemId.value))) {
+        showInvalidItemId()
+        return
+    }
+
+    let requestBody = {
+        itemId: itemId.value,
+        pricePerItem: itemPPI.value
+    }
+
+    action === "sell" ? requestBody["amountSold"] = itemAmount.value : requestBody["amountBought"] = itemAmount.value
+
+    await fetch(endpoint, {
+        method: "POST",
+        body: JSON.stringify(requestBody),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+
+    showSuccess()
+    clearInputs(action)
+}
+
+function clearInputs(div) {
+    document.getElementById(div).querySelectorAll("input").forEach(elem => {
+        elem.value = "";
+    });
+}
+
+function showRejected() {
+    rejectedDiv.style.setProperty("display", "");
+    removeInvalidItemId();
+    removeSuccess();
+}
+
+function showInvalidItemId() {
+    invalidItemIdDiv.style.setProperty("display", "");
+    removeRejected();
+    removeSuccess();
+}
+
+function showSuccess() {
+    successfulDiv.style.setProperty("display", "");
+    removeRejected();
+    removeInvalidItemId();
 }
 
 function removeRejected() {
