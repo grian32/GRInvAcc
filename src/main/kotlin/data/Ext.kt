@@ -1,9 +1,6 @@
 package data
 
-import me.grian.Buy
-import me.grian.Database
-import me.grian.Items
-import me.grian.Sell
+import me.grian.*
 
 fun SellData.addToDb(database : Database) {
     database.sellQueries.insert(itemId, amountSold, pricePerItem)
@@ -23,3 +20,7 @@ fun Items.toItemData() = ItemData(id, current_stock, item_name, important)
 fun Sell.toSellData() = SellData(item_id, amount_sold, price_per_item, date!!)
 
 fun Buy.toBuyData() = BuyData(item_id, amount_bought, price_per_item, date!!)
+
+fun Profit.toProfitData() = ProfitData(amount, reason)
+
+fun Expense.toExpenseData() = ExpenseData(amount, reason)

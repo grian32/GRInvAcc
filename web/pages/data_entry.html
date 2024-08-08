@@ -22,6 +22,8 @@
                     <option> Add Sale </option>
                     <option> Add Buy </option>
                     <option> Add Item </option>
+                    <option> Add Expense </option>
+                    <option> Add Profit </option>
                 </select>
             </p>
         </div>
@@ -71,6 +73,32 @@
             </p>
             <div class="pt-2"></div>
             <button onclick="submitItemAdd();" class="shadow-black shadow-md bg-gray-300 rounded-lg border-white border px-3 py-1 hover:bg-gray-200 active:bg-gray-100"> Submit </button>
+        </div>
+
+        <div id="expense" style="display:none;" class="text-2xl pl-4 pt-6">
+            <p> Amount ($):
+                <input type="text" id="expense_amount" class="text-xl shadow-black shadow-md w-20 pl-2"/>
+            </p>
+
+            <p> Reason:
+                <input type="text" id="expense_reason" class="text-xl shadow-black shadow-md w-96 pl-2"/>
+            </p>
+
+            <div class="pt-2"></div>
+            <button onclick="submitExpense();" class="shadow-black shadow-md bg-gray-300 rounded-lg border-white border px-3 py-1 hover:bg-gray-200 active:bg-gray-100"> Submit </button>
+        </div>
+
+        <div id="profit" style="display:none;" class="text-2xl pl-4 pt-6">
+            <p> Amount ($):
+                <input type="text" id="profit_amount" class="text-xl shadow-black shadow-md w-20 pl-2"/>
+            </p>
+
+            <p> Reason:
+                <input type="text" id="profit_reason" class="text-xl shadow-black shadow-md w-96 pl-2"/>
+            </p>
+
+            <div class="pt-2"></div>
+            <button onclick="submitProfit();" class="shadow-black shadow-md bg-gray-300 rounded-lg border-white border px-3 py-1 hover:bg-gray-200 active:bg-gray-100"> Submit </button>
         </div>
 
         <div id="rejected" class="text-2xl pl-4 pt-4" style="display:none;">

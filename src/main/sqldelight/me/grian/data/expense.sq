@@ -1,0 +1,11 @@
+selectAll:
+SELECT *
+FROM expense;
+
+insert:
+INSERT INTO expense(amount, reason)
+VALUES (?, ?);
+
+deleteWithID:
+DELETE FROM expense
+WHERE id = ?;

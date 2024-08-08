@@ -13,16 +13,12 @@ import io.ktor.server.routing.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.serializersModuleOf
-import me.grian.Buy
-import me.grian.Database
-import me.grian.Items
-import me.grian.Sell
+import me.grian.*
 import org.flywaydb.core.Flyway
 import util.LocalDateTimeSerializer
 import util.itemIdExists
 import util.properties.parseSQLConfig
 import java.io.File
-import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import kotlin.math.roundToInt
@@ -89,7 +85,8 @@ fun main() {
                 call.respondText(Json.encodeToString(importantItems), contentType = ContentType.Application.Json)
             }
 
-            get("/api/profits") {
+            get("/api/profit_display") {
+                // TODO: calculate expenses/profits into this need to add date to expense/profit
                 val currentMonth = LocalDateTime.now(ZoneOffset.UTC).month
 
                 val monthlySales = database.sellQueries.selectAll().executeAsList().map(Sell::toSellData).filter {
@@ -106,13 +103,13 @@ fun main() {
 
                 val profit = monthlySales - monthlyBuys
 
-                val profitData = ProfitData(
+                val profitDisplayData = ProfitDisplayData(
                     monthlySales,
                     monthlyBuys,
                     profit
                 )
 
-                call.respondText(Json.encodeToString(profitData), contentType = ContentType.Application.Json)
+                call.respondText(Json.encodeToString(profitDisplayData), contentType = ContentType.Application.Json)
             }
 
             get("api/item/inventory") {
@@ -190,10 +187,21 @@ fun main() {
                 }
 
 
-                item.addToDb(database)
+                database.itemsQueries.insert(item.itemName, item.important)
                 call.respond(HttpStatusCode.OK)
             }
 
+            post("/api/expense") {
+                val expense = call.receive<ExpenseData>()
+                database.expenseQueries.insert(expense.amount, expense.reason)
+                call.respond(HttpStatusCode.OK)
+            }
+
+            post("/api/profit") {
+                val profit = call.receive<ProfitData>()
+                database.profitQueries.insert(profit.amount, profit.reason)
+                call.respond(HttpStatusCode.OK)
+            }
         }
     }.start(wait = true)
 }

@@ -2,6 +2,8 @@ let dropdown = document.getElementById("data_entry_dropdown")
 let saleDiv = document.getElementById("sell")
 let buyDiv = document.getElementById("buy")
 let addItemDiv = document.getElementById("item")
+let expenseDiv = document.getElementById("expense")
+let profitDiv = document.getElementById("profit")
 let rejectedDiv = document.getElementById("rejected")
 let invalidItemIdDiv = document.getElementById("invalid_item_id")
 let successfulDiv = document.getElementById("success")
@@ -22,13 +24,19 @@ dropdown.onchange = () => {
         case 3:
             setDisplay(addItemDiv)
             break
+        case 4:
+            setDisplay(expenseDiv)
+            break
+        case 5:
+            setDisplay(profitDiv)
+            break
         default:
             break
     }
 }
 
 function setDisplay(activeDiv) {
-    let divs = [saleDiv, buyDiv, addItemDiv]
+    let divs = [saleDiv, buyDiv, addItemDiv, expenseDiv, profitDiv]
     divs.forEach(div => {
         div.style.setProperty("display", div === activeDiv ? "" : "none")
     })
@@ -43,6 +51,14 @@ async function submitBuy() {
     await handleBuySellSubmit("buy", "/api/buy")
 }
 
+async function submitExpense() {
+    await handleExpenseProfitSubmit("expense", "/api/expense")
+}
+
+
+async function submitProfit() {
+    await handleExpenseProfitSubmit("profit", "/api/profit")
+}
 
 async function submitItemAdd() {
     let itemName = document.getElementById("name_add_item")
@@ -101,6 +117,32 @@ async function handleBuySellSubmit(action, endpoint) {
     await fetch(endpoint, {
         method: "POST",
         body: JSON.stringify(requestBody),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+
+    showSuccess()
+    clearInputs(action)
+}
+
+async function handleExpenseProfitSubmit(action, endpoint) {
+    let amount = document.getElementById(`${action}_amount`)
+    let reason = document.getElementById(`${action}_reason`)
+
+    if (isNaN(parseInt(amount.value)) || reason.value === "") {
+        showRejected()
+        return
+    }
+
+    let requestBody = JSON.stringify({
+        amount: amount.value,
+        reason: reason.value
+    })
+
+    await fetch(endpoint, {
+        method: "POST",
+        body: requestBody,
         headers: {
             "Content-Type": "application/json"
         }

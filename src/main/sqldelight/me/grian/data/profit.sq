@@ -1,0 +1,11 @@
+selectAll:
+SELECT *
+FROM profit;
+
+insert:
+INSERT INTO profit(amount, reason)
+VALUES (?, ?);
+
+deleteWithID:
+DELETE FROM profit
+WHERE id = ?;

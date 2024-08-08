@@ -48,7 +48,7 @@ async function populateImportantItems() {
 }
 
 async function updateProfits() {
-    let profitsData = await (await fetch("http://localhost:6450/api/profits")).json()
+    let profitsData = await (await fetch("http://localhost:6450/api/profit_display")).json()
 
     salesAmount.textContent = profitsData["monthlySales"].toString() + "$"
     buyAmount.textContent = profitsData["monthlyBuys"].toString() + "$"

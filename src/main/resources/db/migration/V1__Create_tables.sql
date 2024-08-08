@@ -22,3 +22,15 @@ CREATE TABLE items (
     item_name TEXT NOT NULL,
     important BOOLEAN NOT NULL
 );
+
+CREATE TABLE expense (
+    id SERIAL PRIMARY KEY NOT NULL,
+    amount INTEGER NOT NULL,
+    reason TEXT NOT NULL
+);
+
+CREATE TABLE profit (
+    id SERIAL PRIMARY KEY NOT NULL,
+    amount INTEGER NOT NULL,
+    reason TEXT NOT NULL
+);
