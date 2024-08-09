@@ -21,6 +21,6 @@ fun Sell.toSellData() = SellData(item_id, amount_sold, price_per_item, date!!)
 
 fun Buy.toBuyData() = BuyData(item_id, amount_bought, price_per_item, date!!)
 
-fun Profit.toProfitData() = ProfitData(amount, reason)
+fun Profit.toProfitData() = ProfitData(amount, reason, date!!)
 
-fun Expense.toExpenseData() = ExpenseData(amount, reason)
+fun Expense.toExpenseData() = ExpenseData(amount, reason, date!!)

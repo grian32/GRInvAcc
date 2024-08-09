@@ -101,12 +101,28 @@ fun main() {
                     it.pricePerItem * it.amountBought
                 }.roundToInt()
 
-                val profit = monthlySales - monthlyBuys
+                val monthlyOtherProfits = database.profitQueries.selectAll().executeAsList().map(Profit::toProfitData)
+                    .filter {
+                        it.date.month == currentMonth
+                    }.sumOf {
+                        it.amount
+                    }.roundToInt()
+
+                val monthlyOtherExpenses = database.expenseQueries.selectAll().executeAsList().map(Expense::toExpenseData)
+                    .filter {
+                        it.date.month == currentMonth
+                    }.sumOf {
+                        it.amount
+                    }.roundToInt()
+
+                val profit = monthlySales + monthlyOtherProfits - monthlyBuys - monthlyOtherExpenses
 
                 val profitDisplayData = ProfitDisplayData(
                     monthlySales,
                     monthlyBuys,
-                    profit
+                    profit,
+                    monthlyOtherProfits,
+                    monthlyOtherExpenses
                 )
 
                 call.respondText(Json.encodeToString(profitDisplayData), contentType = ContentType.Application.Json)

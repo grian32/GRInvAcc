@@ -1,7 +1,9 @@
 let importantTable = document.getElementById("important_body")
 let salesAmount = document.getElementById("monthly_sales_amount")
-let buyAmount = document.getElementById("monthly_expense_amount")
-let profitAmount = document.getElementById("monthly_profit_amount")
+let buyAmount = document.getElementById("monthly_buy_amount")
+let totalProfitAmount = document.getElementById("monthly_profit_amount")
+let expenseAmount = document.getElementById("monthly_expense_amount")
+let profitAmount = document.getElementById("monthly_other_profit_amount")
 
 addEventListener("DOMContentLoaded", async _ => {
     await populateImportantItems()
@@ -52,5 +54,7 @@ async function updateProfits() {
 
     salesAmount.textContent = profitsData["monthlySales"].toString() + "$"
     buyAmount.textContent = profitsData["monthlyBuys"].toString() + "$"
-    profitAmount.textContent = profitsData["monthlyProfit"].toString() + "$"
+    totalProfitAmount.textContent = profitsData["monthlyProfit"].toString() + "$"
+    expenseAmount.textContent = profitsData["monthlyOtherExpenses"].toString() + "$"
+    profitAmount.textContent = profitsData["monthlyOtherProfits"].toString() + "$"
 }

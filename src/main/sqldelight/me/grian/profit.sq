@@ -1,5 +1,6 @@
 CREATE TABLE profit (
     id SERIAL PRIMARY KEY NOT NULL,
-    amount INTEGER NOT NULL,
-    reason TEXT NOT NULL
+    amount FLOAT NOT NULL,
+    reason TEXT NOT NULL,
+    date TIMESTAMP
 );

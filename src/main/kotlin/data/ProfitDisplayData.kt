@@ -6,5 +6,7 @@ import kotlinx.serialization.Serializable
 data class ProfitDisplayData(
     val monthlySales: Int,
     val monthlyBuys: Int,
-    val monthlyProfit: Int
+    val monthlyProfit: Int,
+    val monthlyOtherProfits: Int,
+    val monthlyOtherExpenses: Int
 )

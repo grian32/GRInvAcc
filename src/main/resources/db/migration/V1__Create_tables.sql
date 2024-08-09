@@ -25,12 +25,14 @@ CREATE TABLE items (
 
 CREATE TABLE expense (
     id SERIAL PRIMARY KEY NOT NULL,
-    amount INTEGER NOT NULL,
-    reason TEXT NOT NULL
+    amount FLOAT NOT NULL,
+    reason TEXT NOT NULL,
+    date TIMESTAMP DEFAULT (now() AT TIME ZONE 'UTC')
 );
 
 CREATE TABLE profit (
     id SERIAL PRIMARY KEY NOT NULL,
-    amount INTEGER NOT NULL,
-    reason TEXT NOT NULL
+    amount FLOAT NOT NULL,
+    reason TEXT NOT NULL,
+    date TIMESTAMP DEFAULT (now() AT TIME ZONE 'UTC')
 );
