@@ -34,11 +34,6 @@ fun main() {
         sqlConfig.password
     )
 
-    // TODO: add users bought from/sold to to buy/sell
-    // TODO: add expense/profit to data entry tab
-    // TODO: add users to data entry tab
-    // TODO: add buy/sells tab that lets you filter by the following: user, date, item id, all in combo
-
     val flyway = flywayPreload.load()
     flyway.migrate()
 
@@ -86,7 +81,6 @@ fun main() {
             }
 
             get("/api/profit_display") {
-                // TODO: calculate expenses/profits into this need to add date to expense/profit
                 val currentMonth = LocalDateTime.now(ZoneOffset.UTC).month
 
                 val monthlySales = database.sellQueries.selectAll().executeAsList().map(Sell::toSellData).filter {

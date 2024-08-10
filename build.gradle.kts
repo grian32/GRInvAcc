@@ -4,6 +4,7 @@ plugins {
     id("app.cash.sqldelight") version "2.0.2"
     // required for flyway to work with psql ref: https://github.com/flyway/flyway/issues/3889#issuecomment-2131050408
     id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("application")
 }
 
 group = "me.grian"
@@ -30,6 +31,7 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+
 kotlin {
     jvmToolchain(21)
 }
@@ -41,4 +43,8 @@ sqldelight {
             dialect("app.cash.sqldelight:postgresql-dialect:2.0.2")
         }
     }
+}
+
+application {
+    mainClass.set("ApplicationKt")
 }
